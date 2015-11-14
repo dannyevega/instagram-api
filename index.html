@@ -7,13 +7,26 @@
 </head>
 <body>
 
-	<form id="search">
-		<input type="text" id="query">
+	<form id="ig-search">
+		<input type="text" id="ig-query" placeholder="search something on Instagram...">
 	</form>
 
+	<form id="google-search">
+		<input type="text" id="google-query" placeholder="search a location to see the related Instagram posts...">
+	</form>
+
+	<h1 id="ig-heading"></h1>
 	<div id="instagram"></div>
+
+	<h1 id="google-heading"></h1>
+	<div id="map-canvas"></div>
+
 	
 	<script src="http://code.jquery.com/jquery.min.js"></script>
 	<script src="js/script.js"></script>		
+	<script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBx_9inYueWVACKAccpwQLUhetrTKWXIEM&libraries=places">
+    </script>
 </body>
 </html>
+
