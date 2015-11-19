@@ -3,7 +3,9 @@ var $igInputQuery = $('#ig-query');
 var $instagram = $('#instagram');
 var $igHeading = $('#ig-heading');
 var $googleForm = $('#google-search');
-var $googleInputQuery = $('#google-query')
+var $googleInputQuery = $('#google-query');
+var latitude;
+var longitude;
 
 var Instagram = {
 	// store the application settings 
@@ -24,6 +26,23 @@ var Instagram = {
 	hashtag: function(tag, callback){
 		var endpoint = this.BASE_URL + '/tags/' + tag + '/media/recent?client_id=' + this.config.client_id + '&count=50';
 		this.getJSON(endpoint, callback);
+	},
+	igLocation: function(lat, lng, callback){
+		var endpoint = this.BASE_URL + '/media/search?&lat=' + lat + '&lng=' + lng + '&distance=1000&client_id=' + this.config.client_id;
+		this.getJSON(endpoint, callback);
+	},
+	getMediaId: function(){
+		$.ajax({     
+		    type: 'GET',     
+		    url: 'http://api.instagram.com/oembed?callback=&url=http://instagram.com/p/Y7GF-5vftL‌​/',     
+		    cache: false,     
+		    dataType: 'jsonp',     
+		    success: function(data) {           
+		        try{              
+		            var media_id = data[0].media_id;          
+		        }catch(err){}   
+		    } 
+		});		
 	},
 	// Takes url and callback 
 	getJSON: function(url, callback){
@@ -73,8 +92,6 @@ var appendImages = (function(){
 // 	});
 // });
 
-
-
 /** ***************************************************************************** **/
 
 
@@ -92,8 +109,8 @@ var appendImages = (function(){
 // 	}
 // }
 
-// MAYBE USE TO SHOW NEAR IG POSTS WITH BOUNDS 
 
+// MAYBE USE TO SHOW NEAR IG POSTS WITH BOUNDS 
 // function performSearch(){
 
 //  var request = {
@@ -104,15 +121,18 @@ var appendImages = (function(){
 // 	service.nearbySearch(request, searchResults);
 // }
 
-function initialize(response){ 
+function initializeMap(response){ 
 
-	var currentLocation = new google.maps.LatLng(response.results[0].geometry.location.lat, response.results[0].geometry.location.lng)
+	var currentLocation = new google.maps.LatLng(response.results[0].geometry.location.lat, response.results[0].geometry.location.lng);
+
+	latitude = response.results[0].geometry.location.lat;
+	longitude = response.results[0].geometry.location.lng;
 
 	var mapOptions = {
 	  center: currentLocation,
 	  zoom: 12,
 	  mapTypeId: google.maps.MapTypeId.ROADMAP  	
-	}
+	};
 
 	map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
@@ -123,17 +143,20 @@ function initialize(response){
 
 	service = new google.maps.places.PlacesService(map);	
 
+	var input = document.getElementById('google-query');
+
+	var autocomplete = new google.maps.places.Autocomplete(input);
+
 	// google.maps.event.addListenerOnce(map, 'bounds_changed', performSearch);
 
 	// $('#refresh').click(performSearch);
 
 }
 
-
 var Google = {	
 
 	getLocation: function(callback){
-		this.getJSON(callback)		
+		this.getJSON(callback);		
 	},
 
 	getJSON: function(callback){
@@ -151,9 +174,18 @@ var Google = {
 };
 
 $googleForm.submit(function(el){
-	el.preventDefault()
+	el.preventDefault();
 	Google.getJSON(function(response){
-		initialize(response);
+		initializeMap(response);	
+		$googleInputQuery.val('');
+		console.log(latitude);
+		console.log(longitude);
+		Instagram.igLocation(latitude, longitude, function(response){	
+			$instagram.empty();
+			appendImages(response);
+			console.log(response);
+			$igInputQuery.val('');		
+		});
 	});	
 });
 
