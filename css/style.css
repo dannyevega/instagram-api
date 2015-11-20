@@ -1,8 +1,85 @@
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+body { 
+  margin: 0; 
+  background-color: #f2f2f2;  
+}
+
+.top-nav {
+	height: 6em;	
+	background-color: #000;
+	position: fixed;
+	width: 100%;
+	top: 0;
+}
+
+.top-nav h1 {
+	color: #FFF;
+	float: left;
+	padding-top: 16px;
+	padding-left: 22px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;	
+}
+
+.main-col {
+	width: 50%;
+	margin: 0 auto;
+	padding-top: 2em; 
+}
+
+#ig-search {
+	float: left;
+}
+
+.ig-container {
+	margin-top: 12em;
+}
+
+#ig-heading, 
+#google-heading {
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;	
+	padding-left: 22px;
+	position: fixed;
+	margin-top: -96px;
+	height: 58px;
+	padding-top: 8px;
+	background-color: #7F7F7F;
+	width: 100%;
+	color: #FFF;
+	opacity: 0.8;	
+}
+
+#ig-query, 
+#google-query {
+	width: 32em;
+	height: 3em;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+}
+
+#instagram {
+  width: 66em;
+  margin: 2em auto 2em auto;
+}
+
+.photo {  
+  width: 250px;
+  height: 250px;
+  border-radius: 5px;  
+  margin: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);	
+}
+
 #map-canvas {
 	height: 500px;
 	width: 50%;
 }
 
-form input {
-	width: 50%;
-}

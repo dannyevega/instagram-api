@@ -3,23 +3,34 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="css/style.css">
+	<link href='http://fonts.googleapis.com/css?family=Roboto:300' rel='stylesheet' type='text/css'>
 	<title>Hashtagging</title>
 </head>
 <body>
 
-	<form id="ig-search">
-		<input type="text" id="ig-query" placeholder="search something on Instagram...">
-	</form>
+	<nav class="top-nav">
+		<h1>#HASHTAGGING</h1>
+		<div class="main-col">
+			<form id="ig-search">			
+				<input type="text" id="ig-query" placeholder="SEARCH SOMETHING ON INSTAGRAM...">			
+			</form>
 
-	<form id="google-search">
-		<input type="text" id="google-query" placeholder="search a location to see the related Instagram posts...">
-	</form>
+			<form id="google-search">
+				<input type="text" id="google-query" placeholder="SEARCH A LOCATION TO SEE RELATED INSTAGRAM POSTS...">
+			</form>		
+		</div>	
+	</nav>
 
 	<h1 id="ig-heading"></h1>
-	<div id="instagram"></div>
-
-	<h1 id="google-heading"></h1>
-	<div id="map-canvas"></div>
+	
+	<section class="ig-container">
+		<div id="instagram"></div>		
+	</section>
+	
+	<section id="google-container">	
+		<h1 id="google-heading"></h1>
+		<div id="map-canvas"></div>
+	</section>
 
 	
 	<script src="http://code.jquery.com/jquery.min.js"></script>

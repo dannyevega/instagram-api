@@ -1,6 +1,7 @@
 var $igForm = $('#ig-search');
 var $igInputQuery = $('#ig-query');
 var $instagram = $('#instagram');
+var $googleMap = $('#map-canvas');
 var $igHeading = $('#ig-heading');
 var $googleForm = $('#google-search');
 var $googleInputQuery = $('#google-query');
@@ -32,17 +33,7 @@ var Instagram = {
 		this.getJSON(endpoint, callback);
 	},
 	getMediaId: function(){
-		$.ajax({     
-		    type: 'GET',     
-		    url: 'http://api.instagram.com/oembed?callback=&url=http://instagram.com/p/Y7GF-5vftL‌​/',     
-		    cache: false,     
-		    dataType: 'jsonp',     
-		    success: function(data) {           
-		        try{              
-		            var media_id = data[0].media_id;          
-		        }catch(err){}   
-		    } 
-		});		
+		// var endpoint = this.BASE_URL + '/media/' + mediaId + '?client_id=' + this.config.client_id;	
 	},
 	// Takes url and callback 
 	getJSON: function(url, callback){
@@ -66,31 +57,31 @@ var appendImages = (function(){
 	
 	return function(response){
 		for(var i = 0; i < response.data.length; i++){
-			var $img = $('<img>').attr('src', response.data[i].images.low_resolution.url);
+			var $img = $('<img class="photo">').attr('src', response.data[i].images.low_resolution.url);
 			$instagram.append($img);
 		}		
 	};
 
 })();
 
-// Instagram.popular(function(response){
-// 	$igHeading.text("Currently popular on Instagram");
-// 	appendImages(response);
-// 	console.log(response)
-// });
+Instagram.popular(function(response){
+	$googleMap.hide();
+	$igHeading.text("Currently popular on Instagram");
+	appendImages(response);
+});
 
 
-// $igForm.submit(function(el){
-// 	el.preventDefault();
-// 	var tagName = $igInputQuery.val();
-// 	Instagram.hashtag(tagName, function(response){
-// 		$igHeading.text("Results for #" + tagName);	
-// 		$instagram.empty();
-// 		appendImages(response);
-// 		$igInputQuery.val('');
-// 		console.log(response);
-// 	});
-// });
+$igForm.submit(function(el){
+	el.preventDefault();
+	$googleMap.hide();
+	var tagName = $igInputQuery.val();
+	Instagram.hashtag(tagName, function(response){
+		$igHeading.text("Results for #" + tagName);	
+		$instagram.empty();
+		appendImages(response);
+		$igInputQuery.val('');
+	});
+});
 
 /** ***************************************************************************** **/
 
@@ -175,16 +166,19 @@ var Google = {
 
 $googleForm.submit(function(el){
 	el.preventDefault();
+	$googleMap.show();
 	Google.getJSON(function(response){
 		initializeMap(response);	
 		$googleInputQuery.val('');
-		console.log(latitude);
-		console.log(longitude);
+		$igHeading.text('');
+
 		Instagram.igLocation(latitude, longitude, function(response){	
+			// TRY FIGURING OUT MEDIA ID TO GET LAT AND LNG OF EACH IMAGE THEN PUT IT ON A MAP
+			// for(var i = 0; i < response.data.length; i++){
+			// 	console.log(response.data[i].id);
+			// }
 			$instagram.empty();
-			appendImages(response);
-			console.log(response);
-			$igInputQuery.val('');		
+			appendImages(response);	
 		});
 	});	
 });
