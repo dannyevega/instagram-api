@@ -38,18 +38,14 @@ body {
 	float: left;
 }
 
-.ig-container {
-	margin-top: 12em;
-}
 
-#ig-heading, 
-#google-heading {
+#ig-heading {
 	font-family: 'Roboto', sans-serif;
 	font-weight: 300;	
 	padding-left: 22px;
 	position: fixed;
-	margin-top: -96px;
-	height: 58px;
+	margin-top: -80px;
+	height: 60px;
 	padding-top: 8px;
 	background-color: #7F7F7F;
 	width: 100%;
@@ -65,9 +61,29 @@ body {
 	font-weight: 300;
 }
 
+.ig-container {
+	margin-top: 11em;
+  width: 100%;  
+  margin-left: 8.4%;	
+}
+
 #instagram {
   width: 66em;
-  margin: 2em auto 2em auto;
+  margin: 2em auto 2em auto; 
+	float: left;
+	width: 100%;
+	overflow: hidden;	   
+}
+
+.photo-item {
+  background: #FFF;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  height: 288px;
+  display: inline-block;
+  border-radius: 5px;  
+  padding: 1%;
+  margin-right: 1%;
+  margin-bottom: 1%;	
 }
 
 .photo {  
@@ -76,6 +92,16 @@ body {
   border-radius: 5px;  
   margin: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);	
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  padding: 2px;
+  position: absolute;
+  bottom: 11px;
+  right: 8px;
+  background: white;	
 }
 
 #map-canvas {
