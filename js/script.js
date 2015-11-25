@@ -5,6 +5,7 @@ var $googleInputQuery = $('#google-query');
 var $instagram = $('#instagram');
 var $googleMap = $('#map-canvas');
 var $igHeading = $('#ig-heading');
+var $locIgPost = $('#location-ig-posts');
 var latitude;
 var longitude;
 
@@ -53,29 +54,18 @@ Instagram.init({
 	client_id: '915efe9fc621402c8000fefcbc087a12'
 });
 
-// var appendImages = (function(){
-	
-// 	return function(response){
-// 		for(var i = 0; i < response.data.length; i++){
-// 			var $img = $('<img class="photo">').attr('src', response.data[i].images.low_resolution.url);
-// 			$instagram.append($img);
-// 		}		
-// 	};
-
-// })();
-
 var appendImages = (function(){
 	
-	return function(response){
+	return function(response, element){
 		var elements = [];
 		for(var i = 0; i < response.data.length; i++){
 			var $img = $('<img class="photo">').attr('src', response.data[i].images.low_resolution.url);
 			var $igLink = $("<a target='_blank'>").attr("href", response.data[i].link).append($img);	
-			var $avatar = $('<img class="avatar">').attr('src', response.data[i].user.profile_picture);
-			var $div = $('<div class="photo-item">').append($igLink, $avatar);		
+			// var $avatar = $('<img class="avatar">').attr('src', response.data[i].user.profile_picture);
+			var $div = $('<div class="photo-item">').append($igLink);		
 			elements.push($div);						
 		}		
-		$instagram.append(elements);
+		element.append(elements);
 	};
 
 })();
@@ -89,8 +79,8 @@ var appendImages = (function(){
 Instagram.popular(function(response){
 	$googleMap.hide();
 	$igHeading.text("Currently popular on Instagram");
-	appendImages(response);
-	console.log(response)
+	appendImages(response, $instagram);
+	console.log(response);
 });
 
 
@@ -101,39 +91,13 @@ $igForm.submit(function(el){
 	Instagram.hashtag(tagName, function(response){
 		$igHeading.text("Results for #" + tagName);	
 		$instagram.empty();
-		appendImages(response);
+		appendImages(response, $instagram);
 		$igInputQuery.val('');
 	});
 });
 
 /** ***************************************************************************** **/
 
-
-
-
-// function searchResults(results, status){
-// 	console.log(results); 
-
-// 	for(var i = 0; i < results.length; i++){
-// 		var marker = new google.maps.Marker({
-// 			position: results[i].geometry.location,
-// 			map: map,
-// 			icon: results[i].icon
-// 		});	
-// 	}
-// }
-
-
-// MAYBE USE TO SHOW NEAR IG POSTS WITH BOUNDS 
-// function performSearch(){
-
-//  var request = {
-//  		bounds: map.getBounds(),
-//  		name: "McDonald's"
-//   };
-
-// 	service.nearbySearch(request, searchResults);
-// }
 
 function initializeMap(response){ 
 
@@ -160,10 +124,6 @@ function initializeMap(response){
 	var input = document.getElementById('google-query');
 
 	var autocomplete = new google.maps.places.Autocomplete(input);
-
-	// google.maps.event.addListenerOnce(map, 'bounds_changed', performSearch);
-
-	// $('#refresh').click(performSearch);
 
 }
 
@@ -194,15 +154,18 @@ $googleForm.submit(function(el){
 		initializeMap(response);	
 		var tagName = $googleInputQuery.val();
 		$googleInputQuery.val('');
+		if(tagName.length > 70){
+			tagName = tagName.substr(0, 70) + "...";
+			}	
 		$igHeading.text('Instagram posts around ' + tagName);
-
+		// $instagram.empty();
 		Instagram.igLocation(latitude, longitude, function(response){	
 			// TRY FIGURING OUT MEDIA ID TO GET LAT AND LNG OF EACH IMAGE THEN PUT IT ON A MAP
 			// for(var i = 0; i < response.data.length; i++){
 			// 	console.log(response.data[i].id);
 			// }
 			$instagram.empty();
-			appendImages(response);	
+			appendImages(response, $locIgPost);	
 		});
 	});	
 });
