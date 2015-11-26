@@ -61,8 +61,8 @@ var appendImages = (function(){
 		for(var i = 0; i < response.data.length; i++){
 			var $img = $('<img class="photo">').attr('src', response.data[i].images.low_resolution.url);
 			var $igLink = $("<a target='_blank'>").attr("href", response.data[i].link).append($img);	
-			// var $avatar = $('<img class="avatar">').attr('src', response.data[i].user.profile_picture);
-			var $div = $('<div class="photo-item">').append($igLink);		
+			var $avatar = $('<img class="avatar">').attr('src', response.data[i].user.profile_picture);
+			var $div = $('<div class="photo-item">').append($igLink, $avatar);		
 			elements.push($div);						
 		}		
 		element.append(elements);
@@ -70,23 +70,17 @@ var appendImages = (function(){
 
 })();
 
-
-
-
-
-
-
 Instagram.popular(function(response){
 	$googleMap.hide();
 	$igHeading.text("Currently popular on Instagram");
 	appendImages(response, $instagram);
-	console.log(response);
 });
 
 
 $igForm.submit(function(el){
 	el.preventDefault();
 	$googleMap.hide();
+	$locIgPost.hide();
 	var tagName = $igInputQuery.val();
 	Instagram.hashtag(tagName, function(response){
 		$igHeading.text("Results for #" + tagName);	
@@ -158,13 +152,11 @@ $googleForm.submit(function(el){
 			tagName = tagName.substr(0, 70) + "...";
 			}	
 		$igHeading.text('Instagram posts around ' + tagName);
-		// $instagram.empty();
+		
 		Instagram.igLocation(latitude, longitude, function(response){	
-			// TRY FIGURING OUT MEDIA ID TO GET LAT AND LNG OF EACH IMAGE THEN PUT IT ON A MAP
-			// for(var i = 0; i < response.data.length; i++){
-			// 	console.log(response.data[i].id);
-			// }
 			$instagram.empty();
+			$locIgPost.empty();
+			$locIgPost.show();
 			appendImages(response, $locIgPost);	
 		});
 	});	
